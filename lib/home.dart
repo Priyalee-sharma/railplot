@@ -1,141 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:railplot/color.dart';
+import 'package:railplot/custom_appbar.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 90,
-        backgroundColor: Colors.white,
-        foregroundColor: const Color.fromARGB(255, 4, 46, 81),
-
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                Icon(
-                  Icons.location_on,
-                  size: 75,
-                  color: const Color.fromARGB(255, 78, 5, 91),
-                ),
-
-                Positioned(
-                  top: 12,
-                  child: CircleAvatar(
-                    radius: 18,
-                    backgroundImage: AssetImage("assets/trainLogo2.jpg"),
-                  ),
-                ),
-              ],
-            ),
-
-            Expanded(
-              child: SizedBox(
-                height: 80,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "RailPlot",
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-
-                    const SizedBox(
-                      width: 150,
-                      child: Divider(
-                        color: Colors.black,
-                        thickness: 1,
-                        height: 1,
-                      ),
-                    ),
-
-                    RichText(
-                      text: const TextSpan(
-                        style: TextStyle(fontSize: 12),
-                        children: [
-                          TextSpan(
-                            text: "V",
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          TextSpan(
-                            text: "isualize ",
-                            style: TextStyle(color: Colors.black),
-                          ),
-
-                          TextSpan(
-                            text: "A",
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          TextSpan(
-                            text: "nalyze ",
-                            style: TextStyle(color: Colors.black),
-                          ),
-
-                          TextSpan(
-                            text: "O",
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          TextSpan(
-                            text: "ptimize",
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    const SizedBox(
-                      width: 150,
-                      child: Divider(
-                        color: Colors.black,
-                        thickness: 1,
-                        height: 1,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-
-        actions: [
-          Builder(
-            builder: (context) => IconButton(
-              icon: const Icon(Icons.menu, color: Colors.purple, size: 40),
-              onPressed: () {
-                Scaffold.of(context).openEndDrawer();
-              },
-            ),
-          ),
-          IconButton(
-            icon: const Icon(
-              Icons.account_circle,
-              color: Color.fromARGB(255, 87, 85, 85),
-            ),
-            onPressed: () {
-              Navigator.pushNamed(context, 'profile');
-            },
-          ),
-        ],
+      appBar: const CustomAppbar(
+        showProfileIcon: true,
+        showVerticalBar: true,
+        showHambergerMenu: true,
       ),
-
       endDrawer: Drawer(
         child: Opacity(
           opacity: 0.9,
@@ -150,10 +26,29 @@ class Home extends StatelessWidget {
 
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
+
                   children: [
-                    const CircleAvatar(
-                      radius: 18,
-                      backgroundImage: AssetImage("assets/trainLogo2.jpg"),
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Icon(
+                          Icons.location_on,
+                          size: 75,
+                          color: const Color.fromARGB(255, 78, 5, 91),
+                        ),
+                        Positioned(
+                          top: 11,
+                          child: CircleAvatar(
+                            radius: 18,
+                            backgroundColor: Colors.white,
+                            child: Icon(
+                              Icons.train,
+                              color: const Color.fromARGB(255, 42, 6, 48),
+                              size: 30,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
 
                     const SizedBox(width: 10),
@@ -198,114 +93,421 @@ class Home extends StatelessWidget {
         ),
       ),
 
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Stack(
+      body: ListView(
+        children: [
+          Stack(
+            children: [
+              Image.asset(
+                "assets/trainLogo.jpeg",
+                width: double.infinity,
+                height: 250,
+                fit: BoxFit.cover,
+              ),
+
+              Container(
+                width: double.infinity,
+                height: 250,
+                color: Colors.black.withOpacity(0.7),
+              ),
+              const Positioned(
+                top: 80,
+                left: 20,
+
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Powerful Data Analytics for\nRailways",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    SizedBox(height: 10),
+
+                    Text(
+                      "Analyze, improve, and guide loco pilots with real-time insights\nfor safer railway operations across India.",
+                      style: TextStyle(color: Colors.white, fontSize: 11),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 20),
+
+          const Padding(
+            padding: EdgeInsets.only(left: 20, right: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.asset(
-                  "assets/trainBg2.jpg",
-                  width: double.infinity,
-                  height: 250,
-                  fit: BoxFit.cover,
+                Text(
+                  'Speed-Time Graphs',
+                  style: TextStyle(
+                    color: Colors.purple,
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-
-                Container(
-                  width: double.infinity,
-                  height: 250,
-                  color: Colors.black.withOpacity(0.7),
+                Text(
+                  'Visualize loco speed trends to monitor operational efficiency and punctuality with precise real-time data tracking.',
+                  style: TextStyle(fontSize: 18),
+                  //   textAlign: TextAlign.center,
                 ),
-                const Positioned(
-                  top: 80,
-                  left: 20,
+                SizedBox(height: 20),
+                Text(
+                  'Braking Profile Analysis',
+                  style: TextStyle(
+                    color: Colors.purple,
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  'Analyze braking patterns to enhance safety and optimize braking efficiency, reducing wear and increasing train stability.',
+                  style: TextStyle(fontSize: 18),
+                ),
+                SizedBox(height: 20),
 
+                Text(
+                  'Guideline Violation Detection',
+                  style: TextStyle(
+                    color: Colors.purple,
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  'Detect overspeed, late braking, and other violations instantly to enforce compliance and prevent accidents.',
+                  style: TextStyle(fontSize: 18),
+                ),
+                SizedBox(height: 40),
+              ],
+            ),
+          ),
+
+          Center(
+            child: Container(
+              height: 600,
+              width: 400,
+              decoration: BoxDecoration(gradient: AppColors.railGradient),
+              child: Center(
+                child: Container(
+                  height: 500,
+                  width: 370,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      SizedBox(height: 30),
                       Text(
-                        "Powerful Data Analytics for\nRailways",
+                        'Insightful Speed-Time Curve Comparison',
+                        textAlign: TextAlign.center,
+
                         style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
+                          fontSize: 25,
+                          color: const Color.fromARGB(255, 151, 27, 153),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-
-                      SizedBox(height: 10),
-
-                      Text(
-                        "Analyze, improve, and guide loco pilots with real-time insights\nfor safer railway operations across India.",
-                        style: TextStyle(color: Colors.white, fontSize: 11),
+                      SizedBox(height: 40),
+                      Icon(Icons.trending_up_outlined, size: 40),
+                      Padding(
+                        padding: EdgeInsets.only(left: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Before Training',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              'Irregular speed, sharp accelerations and braking reducing efficiency.',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Icon(Icons.trending_up_outlined, size: 40),
+                      Padding(
+                        padding: EdgeInsets.only(left: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'After Training',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              'Smoother driving with optimal speed control enhancing safety and fuel economy.',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 20, right: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Braking Zone Visual Analysis',
+                  style: TextStyle(
+                    fontSize: 25,
+                    color: const Color.fromARGB(255, 151, 27, 153),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 20),
+                Text(
+                  'This visual tool identifies critical braking zones, flagging late applications and unnecessary early brakes for targeted pilot training.',
+                  style: TextStyle(fontSize: 18),
+                ),
+                SizedBox(height: 20),
+                Text(
+                  'Reducing braking inconsistencies ensures greater passenger comfort, less mechanical stress, and enhanced safety.',
+                  style: TextStyle(fontSize: 18),
+                ),
               ],
             ),
+          ),
+          SizedBox(height: 50),
+          Center(
+            child: Container(
+              height: 570,
+              width: 400,
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 234, 233, 233),
+              ),
+              child: Column(
+                children: [
+                  SizedBox(height: 45),
+                  Text(
+                    'Driving Pattern Suggestions',
+                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 45),
+                  Container(
+                    height: 120,
+                    width: 370,
 
-            const SizedBox(height: 20),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 20),
+                          Text(
+                            'Optimized Speed Control',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            'Encourages steady acceleration to reduce energy consumption.',
+                            style: TextStyle(
+                              color: const Color.fromARGB(255, 57, 56, 56),
+                              fontSize: 18,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Container(
+                    height: 120,
+                    width: 370,
 
-            const Text(
-              'Speed-Time Graphs',
-              style: TextStyle(
-                color: Colors.purple,
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 20),
+                          Text(
+                            'Timely Braking',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            'Promotes early and smooth braking for increased safety and efficiency.',
+                            style: TextStyle(
+                              color: const Color.fromARGB(255, 57, 56, 56),
+                              fontSize: 18,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Container(
+                    height: 120,
+                    width: 370,
+
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 20),
+                          Text(
+                            'Compliance Reinforcement',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            'Alerts on any deviations to ensure adherence to safety guidelines.',
+                            style: TextStyle(
+                              color: const Color.fromARGB(255, 57, 56, 56),
+                              fontSize: 18,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15),
-              child: Text(
-                'Visualize loco speed trends to monitor operational efficiency and punctuality with precise real-time data tracking.',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 30),
+          Column(
+            children: [
+              Icon(Icons.mail_outline, size: 40),
+              Text('Mail to Us At', style: TextStyle(fontSize: 18)),
+              Text(
+                'connect@orryworx.com',
+                style: TextStyle(
+                  fontSize: 21,
+                  color: const Color.fromARGB(255, 174, 103, 224),
+                ),
               ),
-            ),
-
-            const SizedBox(height: 20),
-
-            const Text(
-              'Braking Profile Analysis',
-              style: TextStyle(
-                color: Colors.purple,
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
+              SizedBox(height: 15),
+              Icon(Icons.production_quantity_limits_sharp, size: 40),
+              Text('Product of', style: TextStyle(fontSize: 18)),
+              Text(
+                'www.orryworx.com',
+                style: TextStyle(
+                  fontSize: 21,
+                  color: const Color.fromARGB(255, 174, 103, 224),
+                ),
               ),
-            ),
-
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15),
-              child: Text(
-                'Analyze braking patterns to enhance safety and optimize braking efficiency, reducing wear and increasing train stability.',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.center,
+              SizedBox(height: 40),
+              Container(
+                height: 1,
+                width: 230,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: [
+                      Colors.transparent,
+                      Colors.grey,
+                      Colors.transparent,
+                    ],
+                  ),
+                ),
               ),
-            ),
-
-            const SizedBox(height: 20),
-
-            const Text(
-              'Guideline Violation Detection',
-              style: TextStyle(
-                color: Colors.purple,
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
+              SizedBox(height: 40),
+              Icon(Icons.location_on_outlined, size: 40),
+              Text(
+                'Gurugram',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: const Color.fromARGB(255, 174, 103, 224),
+                ),
               ),
-            ),
-
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15),
-              child: Text(
-                'Detect overspeed, late braking, and other violations instantly to enforce compliance and prevent accidents.',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.center,
+              Text(
+                'Plot No. 1038, Sector 40 Gurugram (HR), 122001',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: const Color.fromARGB(255, 57, 56, 56),
+                ),
               ),
-            ),
+              SizedBox(height: 30),
+              Container(
+                height: 1,
+                width: 230,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: [
+                      Colors.transparent,
+                      Colors.grey,
+                      Colors.transparent,
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 40),
+              DecoratedBox(
+                decoration: BoxDecoration(gradient: AppColors.railGradient),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                    shadowColor: Colors.transparent,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.zero,
+                    ),
+                    fixedSize: const Size(350, 50),
+                  ),
+                  onPressed: () {},
 
-            const SizedBox(height: 40),
-          ],
-        ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.description, color: Colors.white, size: 25),
+                      const Text(
+                        'View RailPlot Presentation',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 30),
+            ],
+          ),
+        ],
       ),
 
       bottomNavigationBar: Container(
@@ -315,7 +517,10 @@ class Home extends StatelessWidget {
         child: const Center(
           child: Text(
             "© 2026 Orryworx | All Rights Reserved",
-            style: TextStyle(color: Colors.black, fontSize: 12),
+            style: TextStyle(
+              color: Color.fromARGB(255, 57, 56, 56),
+              fontSize: 18,
+            ),
           ),
         ),
       ),

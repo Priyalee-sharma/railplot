@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:railplot/logindata.dart';
 import 'package:railplot/color.dart';
+import 'package:railplot/custom_appbar.dart';
 
 class Login extends StatelessWidget {
   const Login({super.key});
@@ -10,103 +11,12 @@ class Login extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isLogin = context.watch<LoginData>().getError();
     return Scaffold(
-      // backgroundColor: AppColors.primaryPurple,
-      appBar: AppBar(
-        toolbarHeight: 90,
-        backgroundColor: Colors.white,
-        foregroundColor: const Color.fromARGB(255, 4, 46, 81),
-
-        title: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                Icon(
-                  Icons.location_on,
-                  size: 70,
-                  color: Color.fromARGB(255, 78, 5, 91),
-                ),
-
-                Positioned(
-                  top: 18,
-                  child: CircleAvatar(
-                    radius: 16,
-                    backgroundImage: AssetImage("assets/trainLogo2.jpg"),
-                  ),
-                ),
-              ],
-            ),
-
-            // const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "RailPlot",
-                    style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
-                  ),
-
-                  const SizedBox(
-                    width: 150,
-                    // height: 10,
-                    child: Divider(
-                      color: Colors.black,
-                      thickness: 1,
-                      height: 1,
-                    ),
-                  ),
-
-                  RichText(
-                    text: const TextSpan(
-                      style: TextStyle(fontSize: 12, color: Colors.black),
-                      children: [
-                        TextSpan(
-                          text: "V",
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        TextSpan(text: "isualize "),
-
-                        TextSpan(
-                          text: "A",
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        TextSpan(text: "nalyze "),
-
-                        TextSpan(
-                          text: "O",
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        TextSpan(text: "ptimize"),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(
-                    width: 150,
-                    child: Divider(
-                      color: Colors.black,
-                      thickness: 1,
-                      height: 1,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+      appBar: const CustomAppbar(
+        showProfileIcon: false,
+        showVerticalBar: false,
+        showHambergerMenu: false,
       ),
+
       body: DecoratedBox(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -301,13 +211,68 @@ class Login extends StatelessWidget {
                 TextField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-
+                    fillColor: const Color.fromARGB(255, 84, 83, 83),
                     labelText: 'Enter your email',
                     errorText: isLogin ? "" : null,
                   ),
                   onChanged: (name) {
                     context.read<LoginData>().setName(name);
                   },
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  'Password',
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: const Color.fromARGB(255, 4, 45, 79),
+                  ),
+                ),
+                SizedBox(height: 8),
+                TextField(
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Enter your Password',
+                    errorText: isLogin ? "Login failed let's try again." : null,
+                  ),
+                  onChanged: (pass) {
+                    context.read<LoginData>().setPass(pass);
+                  },
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () {},
+                    child: const Text(
+                      'Forget password',
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 136, 40, 153),
+                        fontSize: 17,
+                        decoration: TextDecoration.underline,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 30),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(6), // 👈 same radius
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(gradient: AppColors.railGradient),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shadowColor: Colors.transparent,
+                        fixedSize: Size(350, 50),
+                      ),
+                      onPressed: () {},
+                      child: Text(
+                        'Login',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -324,17 +289,7 @@ class Login extends StatelessWidget {
             // const SizedBox(height: 20),
 
             // /// PASSWORD FIELD
-            // TextField(
-            //   obscureText: true,
-            //   decoration: InputDecoration(
-            //     border: OutlineInputBorder(),
-            //     labelText: 'Enter Password',
-            //     errorText: isLogin ? "Login failed let's try again." : null,
-            //   ),
-            //   onChanged: (pass) {
-            //     context.read<LoginData>().setPass(pass);
-            //   },
-            // ),
+           
 
             // const SizedBox(height: 25),
 
