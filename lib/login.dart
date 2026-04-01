@@ -1,16 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:railplot/models/user_api.dart';
 import 'package:railplot/passwordProvider.dart';
 import 'package:railplot/logindata.dart';
 import 'package:railplot/color.dart';
 import 'package:railplot/custom_appbar.dart';
 
 class Login extends StatelessWidget {
-  const Login({super.key});
+  Login({super.key});
+  final userNameController = TextEditingController();
+  final passwordController = TextEditingController();
+  Future<void> loginUser() async {
+    final userName = userNameController.text;
+    final password = passwordController.text;
+
+    final user = await UserApi.fetchUsers(userName, password);
+    if (user) {
+      print('login successful');
+    } else {
+      print('Invalid credentials');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     bool isLogin = context.watch<LoginData>().getError();
+
     return Scaffold(
       appBar: const CustomAppbar(
         showProfileIcon: false,
@@ -54,28 +69,10 @@ class Login extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Stack(
-                    //   alignment: Alignment.center,
-                    //   children: [
-                    //     Icon(
-                    //       Icons.location_on,
-                    //       size: 50,
-                    //       color: const Color.fromARGB(255, 78, 5, 91),
-                    //     ),
-                    //     SizedBox(width: 8),
-                    //     Positioned(
-                    //       top: 10,
-                    //       child: CircleAvatar(
-                    //         radius: 10,
-                    //         // backgroundImage: AssetImage("assets/trainLogo2.jpg"),
-
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
                     Stack(
                       alignment: Alignment.center,
                       children: [
+                        // CustomAppbar(),
                         Icon(
                           Icons.location_on,
                           size: 50,
@@ -210,6 +207,7 @@ class Login extends StatelessWidget {
                 ),
                 SizedBox(height: 8),
                 TextField(
+                  controller: userNameController,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     fillColor: const Color.fromARGB(255, 84, 83, 83),
@@ -232,6 +230,7 @@ class Login extends StatelessWidget {
                 Consumer<PasswordProvider>(
                   builder: (context, provider, child) {
                     return TextField(
+                      controller: passwordController,
                       obscureText: provider.isHidden,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
@@ -283,7 +282,9 @@ class Login extends StatelessWidget {
                         shadowColor: Colors.transparent,
                         fixedSize: Size(350, 50),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        loginUser();
+                      },
                       child: Text(
                         'Login',
                         style: TextStyle(color: Colors.white, fontSize: 18),
@@ -300,91 +301,4 @@ class Login extends StatelessWidget {
       ),
     );
   }
-} 
-
-
-            // const SizedBox(height: 20),
-
-            // /// PASSWORD FIELD
-           
-
-            // const SizedBox(height: 25),
-
-            /// LOGIN BUTTON
-            // SizedBox(
-            //   width: double.infinity,
-            //   height: 45,
-            //   child: ElevatedButton(
-            //     style: ElevatedButton.styleFrom(
-            //       backgroundColor: Color.fromARGB(255, 78, 5, 91),
-            //     ),
-            //     onPressed: () {
-            //       context.read<LoginData>().setError();
-
-            //       if (!context.read<LoginData>().getError()) {
-            //         Navigator.pushNamed(context, 'welcome');
-            //       }
-            //     },
-            //     child: const Text("Login", style: TextStyle(fontSize: 16)),
-            //   ),
-         
-
-//   Widget build(BuildContext context) {
-//     bool isLogin = context.watch<LoginData>().getError();
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Login Page'),
-//         foregroundColor: Colors.purple,
-//         backgroundColor: Colors.white,
-//       ),
-//       body: Center(
-//         child: Column(
-//           mainAxisSize: MainAxisSize.min,
-//           children: [
-//             SizedBox(
-//               width: 300,
-//               height: 60,
-//               child: TextField(
-//                 onChanged: (name) {
-//                   context.read<LoginData>().setName(name);
-//                 },
-//                 decoration: InputDecoration(
-//                   border: OutlineInputBorder(),
-//                   labelText: 'Enter email',
-//                   errorText: isLogin ? "" : null,
-//                 ),
-//               ),
-//             ),
-//             SizedBox(height: 30),
-//             SizedBox(
-//               width: 300,
-//               height: 60,
-//               child: TextField(
-//                 onChanged: (pass) {
-//                   context.read<LoginData>().setPass(pass);
-//                 },
-//                 decoration: InputDecoration(
-//                   border: OutlineInputBorder(),
-//                   labelText: 'Enter Password',
-//                   errorText: isLogin ? "Login failed let's try again." : null,
-//                 ),
-//               ),
-//             ),
-//             SizedBox(height: 30),
-//             ElevatedButton(
-//               onPressed: () {
-//                 context.read<LoginData>().setError();
-//                 print('checking');
-//                 print(context.read<LoginData>().getError());
-//                 if (!context.read<LoginData>().getError()) {
-//                   Navigator.pushNamed(context, 'welcome');
-//                 }
-//               },
-//               child: Text('Login'),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
+}
