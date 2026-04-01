@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:railplot/passwordProvider.dart';
 import 'package:railplot/logindata.dart';
 import 'package:railplot/color.dart';
 import 'package:railplot/custom_appbar.dart';
@@ -47,8 +48,8 @@ class Login extends StatelessWidget {
               ],
             ),
 
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: ListView(
+              padding: EdgeInsets.all(16),
               children: [
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -228,17 +229,33 @@ class Login extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 8),
-                TextField(
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Enter your Password',
-                    errorText: isLogin ? "Login failed let's try again." : null,
-                  ),
-                  onChanged: (pass) {
-                    context.read<LoginData>().setPass(pass);
+                Consumer<PasswordProvider>(
+                  builder: (context, provider, child) {
+                    return TextField(
+                      obscureText: provider.isHidden,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Enter your Password',
+                        errorText: isLogin
+                            ? "Login failed let's try again."
+                            : null,
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            provider.isHidden
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: provider.passwordVisibility,
+                        ),
+                      ),
+
+                      onChanged: (pass) {
+                        context.read<LoginData>().setPass(pass);
+                      },
+                    );
                   },
                 ),
+
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(

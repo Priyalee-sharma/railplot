@@ -7,14 +7,21 @@ class Profile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppbar(showProfileIcon: true, showVerticalBar: true),
+      appBar: const CustomAppbar(
+        showProfileIcon: true,
+        showVerticalBar: true,
+        showHambergerMenu: true,
+      ),
       body: Container(
         decoration: BoxDecoration(gradient: AppColors.railGradient),
         child: Center(
           child: Container(
             height: 700,
             width: 370,
-            decoration: BoxDecoration(color: Colors.white),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(5),
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
