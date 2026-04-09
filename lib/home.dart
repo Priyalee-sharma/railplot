@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:railplot/color.dart';
-import 'package:railplot/custom_appbar.dart';
+import 'package:railplot/Services/request_demo.dart';
+import 'package:railplot/models/color.dart';
+import 'package:railplot/models/custom_appbar.dart';
+import 'package:railplot/models/custom_button.dart';
+import 'package:railplot/providers/login_provider.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
+
   @override
   Widget build(BuildContext context) {
+    final isLoggedIn = context.watch<LoginData>().isLoggedIn;
+    final demoButton = context.watch<LoginData>().isLoggedIn;
     return Scaffold(
-      appBar: const CustomAppbar(
-        showProfileIcon: true,
-        showVerticalBar: true,
+      appBar: CustomAppbar(
+        showProfileIcon: context.watch<LoginData>().isLoggedIn,
+        showVerticalBar: context.watch<LoginData>().isLoggedIn,
         showHambergerMenu: true,
       ),
       endDrawer: Drawer(
@@ -60,34 +67,40 @@ class Home extends StatelessWidget {
                   ],
                 ),
               ),
-
               ListTile(
-                leading: const Icon(Icons.login),
-                title: const Text("Login"),
+                leading: const Icon(Icons.home),
+                title: const Text(
+                  "Home",
+                  style: TextStyle(
+                    color: Colors.purple,
+                    decoration: TextDecoration.underline,
+                    decorationColor: Colors.purple,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
                 onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pushNamed(context, 'login');
+                  Navigator.pushReplacementNamed(context, 'home');
                 },
               ),
-
-              ListTile(
-                leading: const Icon(Icons.person_add),
-                title: const Text("Signup"),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pushNamed(context, 'signup');
-                },
-              ),
-
               const Divider(),
+              if (!isLoggedIn)
+                ListTile(
+                  leading: const Icon(Icons.login),
+                  title: const Text("Login"),
+                  onTap: () {
+                    Navigator.pushReplacementNamed(context, 'login');
+                  },
+                ),
+              if (!isLoggedIn) const Divider(),
 
-              ListTile(
-                leading: const Icon(Icons.settings),
-                title: const Text("Settings"),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
+              if (isLoggedIn)
+                ListTile(
+                  leading: const Icon(Icons.list),
+                  title: const Text("Route List"),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
             ],
           ),
         ),
@@ -100,45 +113,68 @@ class Home extends StatelessWidget {
               Image.asset(
                 "assets/trainLogo.jpeg",
                 width: double.infinity,
-                height: 250,
+                height: 380,
                 fit: BoxFit.cover,
               ),
 
               Container(
                 width: double.infinity,
-                height: 250,
-                color: Colors.black.withOpacity(0.7),
+                height: 380,
+                color: Colors.black.withOpacity(0.8),
               ),
-              const Positioned(
+              Positioned(
                 top: 80,
                 left: 20,
-
+                right: 20,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Powerful Data Analytics for\nRailways",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      "Powerful Data Analytics for Railways",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(color: Colors.white, fontSize: 30),
                     ),
 
-                    SizedBox(height: 10),
+                    SizedBox(height: 18),
 
                     Text(
-                      "Analyze, improve, and guide loco pilots with real-time insights\nfor safer railway operations across India.",
-                      style: TextStyle(color: Colors.white, fontSize: 11),
+                      "Analyze, improve, and guide loco pilot with real-time insights for safer, more efficient railway operations across India.",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
+                    SizedBox(height: 20),
+                    if (!demoButton)
+                      CustomButton(
+                        text: 'REQUEST A DEMO',
+                        width: 200,
+                        height: 50,
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            barrierColor: Colors.black.withOpacity(0.3),
+                            builder: (context) {
+                              return Dialog(
+                                insetPadding:
+                                    EdgeInsets.zero, // 👈 THIS IS THE KEY
+                                backgroundColor: Colors.transparent,
+                                child: const RequestDemo(),
+                              );
+                            },
+                          );
+                        },
+                      ),
                   ],
                 ),
               ),
             ],
           ),
 
-          const SizedBox(height: 20),
-
+          const SizedBox(height: 40),
+          Container(
+            margin: EdgeInsets.all(20),
+            child: Image.asset('assets/Home_graph.jpeg'),
+          ),
+          const SizedBox(height: 30),
           const Padding(
             padding: EdgeInsets.only(left: 20, right: 20),
             child: Column(
@@ -206,23 +242,29 @@ class Home extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(height: 30),
-                      Text(
-                        'Insightful Speed-Time Curve Comparison',
-                        textAlign: TextAlign.center,
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 25),
+                        child: Text(
+                          'Insightful Speed-Time Curve Comparison',
+                          textAlign: TextAlign.center,
 
-                        style: TextStyle(
-                          fontSize: 25,
-                          color: const Color.fromARGB(255, 151, 27, 153),
-                          fontWeight: FontWeight.bold,
+                          style: TextStyle(
+                            fontSize: 22,
+                            color: const Color.fromARGB(255, 151, 27, 153),
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
+
                       SizedBox(height: 40),
-                      Icon(Icons.trending_up_outlined, size: 40),
+
                       Padding(
                         padding: EdgeInsets.only(left: 10),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Image.asset('assets/graph01.png'),
+                            SizedBox(height: 10),
                             Text(
                               'Before Training',
                               style: TextStyle(
@@ -234,16 +276,9 @@ class Home extends StatelessWidget {
                               'Irregular speed, sharp accelerations and braking reducing efficiency.',
                               style: TextStyle(fontSize: 18),
                             ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      Icon(Icons.trending_up_outlined, size: 40),
-                      Padding(
-                        padding: EdgeInsets.only(left: 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                            SizedBox(height: 20),
+                            Image.asset('assets/graph02.png'),
+                            SizedBox(height: 10),
                             Text(
                               'After Training',
                               style: TextStyle(
@@ -251,6 +286,7 @@ class Home extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
+
                             Text(
                               'Smoother driving with optimal speed control enhancing safety and fuel economy.',
                               style: TextStyle(fontSize: 18),
@@ -264,6 +300,12 @@ class Home extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(height: 40),
+          Container(
+            margin: EdgeInsets.all(20),
+            child: Image.asset('assets/Home_graph02.jpeg'),
+          ),
+          SizedBox(height: 30),
           Padding(
             padding: EdgeInsets.only(left: 20, right: 20),
             child: Column(
@@ -411,7 +453,7 @@ class Home extends StatelessWidget {
           SizedBox(height: 30),
           Column(
             children: [
-              Icon(Icons.mail_outline, size: 40),
+              Image.asset('assets/email.png', height: 50, width: 50),
               Text('Mail to Us At', style: TextStyle(fontSize: 18)),
               Text(
                 'connect@orryworx.com',
@@ -420,8 +462,8 @@ class Home extends StatelessWidget {
                   color: const Color.fromARGB(255, 174, 103, 224),
                 ),
               ),
-              SizedBox(height: 15),
-              Icon(Icons.production_quantity_limits_sharp, size: 40),
+              SizedBox(height: 20),
+              Image.asset('assets/product.png', height: 50, width: 50),
               Text('Product of', style: TextStyle(fontSize: 18)),
               Text(
                 'www.orryworx.com',
@@ -447,21 +489,25 @@ class Home extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 40),
-              Icon(Icons.location_on_outlined, size: 40),
+              Image.asset('assets/location.jpeg', width: 45, height: 55),
+
               Text(
-                'Gurugram',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: const Color.fromARGB(255, 174, 103, 224),
+                "Gurugram",
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.purple, fontSize: 18),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 50),
+                child: Text(
+                  'Plot No. 1038, Sector 40 Gurugram (HR), 122001',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: const Color.fromARGB(255, 57, 56, 56),
+                  ),
+                  textAlign: TextAlign.center,
                 ),
               ),
-              Text(
-                'Plot No. 1038, Sector 40 Gurugram (HR), 122001',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: const Color.fromARGB(255, 57, 56, 56),
-                ),
-              ),
+
               SizedBox(height: 30),
               Container(
                 height: 1,

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:railplot/providers/login_provider.dart';
 import 'package:railplot/train_icon.dart';
+import 'package:provider/provider.dart';
 
 class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
   final double height;
   final bool showProfileIcon;
   final bool showVerticalBar;
   final bool showHambergerMenu;
+
   const CustomAppbar({
     super.key,
     this.height = 90,
@@ -15,6 +18,7 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
   });
   @override
   Widget build(BuildContext context) {
+    final isLoggedIn = context.watch<LoginData>().isLoggedIn;
     return AppBar(
       automaticallyImplyLeading: false,
       toolbarHeight: 90,
@@ -108,29 +112,26 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
         if (showHambergerMenu)
           Builder(
             builder: (context) => IconButton(
-              icon: const Icon(Icons.menu, color: Colors.purple, size: 40),
+              icon: Icon(Icons.menu, color: Colors.purple, size: 40),
               onPressed: () {
                 Scaffold.of(context).openEndDrawer();
               },
             ),
           ),
         if (showVerticalBar)
-          SizedBox(
+          const SizedBox(
             height: 40,
             child: VerticalDivider(
               width: 20,
               thickness: 0.7,
-              color: const Color.fromARGB(255, 145, 145, 145),
+              color: Color.fromARGB(255, 145, 145, 145),
             ),
           ),
-        if (showProfileIcon)
+        if (showProfileIcon && isLoggedIn)
           IconButton(
-            icon: const Icon(
-              Icons.account_circle,
-              color: Color.fromARGB(255, 87, 85, 85),
-            ),
+            icon: const Icon(Icons.account_circle),
             onPressed: () {
-              Navigator.pushNamed(context, 'profile');
+              context.read<LoginData>().toggleMenu();
             },
           ),
       ],

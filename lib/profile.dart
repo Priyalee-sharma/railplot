@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:railplot/color.dart';
-import 'package:railplot/custom_appbar.dart';
+import 'package:railplot/models/color.dart';
+import 'package:railplot/models/custom_appbar.dart';
+import 'package:railplot/models/custom_button.dart';
 
 class Profile extends StatelessWidget {
   const Profile({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppbar(
+      appBar: CustomAppbar(
         showProfileIcon: true,
         showVerticalBar: true,
         showHambergerMenu: true,
@@ -20,7 +21,7 @@ class Profile extends StatelessWidget {
             width: 370,
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(5),
+              borderRadius: BorderRadius.circular(10),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,7 +149,7 @@ class Profile extends StatelessWidget {
                                       0,
                                       0,
                                       0,
-                                    ), // 👈 30% opacity
+                                    ), //  30% opacity
                                   ),
 
                                   // border: OutlineInputBorder(),
@@ -156,6 +157,7 @@ class Profile extends StatelessWidget {
                               ),
                             ),
                             SizedBox(height: 10),
+
                             TextField(
                               decoration: InputDecoration(
                                 labelText: "Confirm New Password",
@@ -170,53 +172,28 @@ class Profile extends StatelessWidget {
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
-                                    color: Color.fromARGB(
-                                      30,
-                                      0,
-                                      0,
-                                      0,
-                                    ), // 👈 30% opacity
+                                    color: Color.fromARGB(30, 0, 0, 0), //
                                   ),
-
-                                  // border: OutlineInputBorder(),
                                 ),
-                                // focusedBorder: OutlineInputBorder(
-                                //   borderSide: BorderSide(
-                                //     color: Colors.purple.withOpacity(
-                                //       0.5,
-                                //     ), // 👈 50% opacity
-                                //     width: 2,
-                                //   ),
-                                // ),
                               ),
                             ),
                             SizedBox(height: 20),
                             Align(
-                              alignment: Alignment.centerLeft,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(
-                                  6,
-                                ), // 👈 same radius
-                                child: DecoratedBox(
-                                  decoration: BoxDecoration(
-                                    gradient: AppColors.railGradient,
-                                  ),
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.transparent,
-                                      shadowColor: Colors.transparent,
-                                      fixedSize: Size(200, 50),
+                              alignment: Alignment.center,
+                              child: CustomButton(
+                                text: 'Change Password',
+                                width: 250,
+                                height: 60,
+                                onPressed: () {
+                                  child:
+                                  Text(
+                                    'Change Password',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 22,
                                     ),
-                                    onPressed: () {},
-                                    child: Text(
-                                      'Chnage Password',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                  );
+                                },
                               ),
                             ),
                           ],

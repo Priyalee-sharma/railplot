@@ -1,33 +1,28 @@
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
+import 'package:railplot/home.dart';
+import 'package:railplot/models/auth_storage.dart';
+import 'package:railplot/models/custom_button.dart';
+
 import 'package:railplot/models/user_api.dart';
 import 'package:railplot/passwordProvider.dart';
-import 'package:railplot/logindata.dart';
-import 'package:railplot/color.dart';
-import 'package:railplot/custom_appbar.dart';
+import 'package:railplot/models/color.dart';
+import 'package:railplot/models/custom_appbar.dart';
+import 'package:railplot/providers/login_provider.dart';
 
 class Login extends StatelessWidget {
   Login({super.key});
   final userNameController = TextEditingController();
   final passwordController = TextEditingController();
-  Future<void> loginUser() async {
-    final userName = userNameController.text;
-    final password = passwordController.text;
-
-    final user = await UserApi.fetchUsers(userName, password);
-    if (user) {
-      print('login successful');
-    } else {
-      print('Invalid credentials');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
-    bool isLogin = context.watch<LoginData>().getError();
+    bool hashError = context.watch<LoginData>().error != null;
+    final provider = Provider.of<LoginData>(context);
 
     return Scaffold(
-      appBar: const CustomAppbar(
+      appBar: CustomAppbar(
         showProfileIcon: false,
         showVerticalBar: false,
         showHambergerMenu: false,
@@ -191,41 +186,44 @@ class Login extends StatelessWidget {
                 ),
                 SizedBox(
                   height: 60,
-                  child: Divider(
-                    thickness: 0.4,
-                    color: const Color.fromARGB(255, 106, 105, 105),
-                  ),
+                  child: Divider(thickness: 0.1, color: Color(0xFFA5A1F7)),
                 ),
+                if (provider.error != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: Text(
+                      "Login failed. Invalid credentials.",
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
 
                 const SizedBox(height: 20),
-                Text(
-                  'Email',
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: const Color.fromARGB(255, 4, 45, 79),
-                  ),
-                ),
+                Text('Email', style: TextStyle(fontSize: 15)),
                 SizedBox(height: 8),
                 TextField(
                   controller: userNameController,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    fillColor: const Color.fromARGB(255, 84, 83, 83),
+                    filled: true,
+                    fillColor: const Color.fromARGB(255, 232, 229, 238),
                     labelText: 'Enter your email',
-                    errorText: isLogin ? "" : null,
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: const Color.fromARGB(255, 102, 103, 162),
+                      ),
+                    ),
+                    labelStyle: TextStyle(color: Colors.grey),
                   ),
                   onChanged: (name) {
-                    context.read<LoginData>().setName(name);
+                    // context.read<LoginData>().setName(name);
                   },
                 ),
                 const SizedBox(height: 20),
-                Text(
-                  'Password',
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: const Color.fromARGB(255, 4, 45, 79),
-                  ),
-                ),
+                Text('Password', style: TextStyle(fontSize: 15)),
                 SizedBox(height: 8),
                 Consumer<PasswordProvider>(
                   builder: (context, provider, child) {
@@ -234,10 +232,15 @@ class Login extends StatelessWidget {
                       obscureText: provider.isHidden,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: const Color.fromARGB(255, 232, 229, 238),
                         labelText: 'Enter your Password',
-                        errorText: isLogin
-                            ? "Login failed let's try again."
-                            : null,
+                        labelStyle: TextStyle(color: Colors.grey),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: const Color.fromARGB(255, 102, 103, 162),
+                          ),
+                        ),
                         suffixIcon: IconButton(
                           icon: Icon(
                             provider.isHidden
@@ -249,7 +252,7 @@ class Login extends StatelessWidget {
                       ),
 
                       onChanged: (pass) {
-                        context.read<LoginData>().setPass(pass);
+                        // context.read<LoginData>().setPass(pass);
                       },
                     );
                   },
@@ -272,25 +275,17 @@ class Login extends StatelessWidget {
                 ),
 
                 SizedBox(height: 30),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(6), // 👈 same radius
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(gradient: AppColors.railGradient),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        shadowColor: Colors.transparent,
-                        fixedSize: Size(350, 50),
-                      ),
-                      onPressed: () {
-                        loginUser();
-                      },
-                      child: Text(
-                        'Login',
-                        style: TextStyle(color: Colors.white, fontSize: 18),
-                      ),
-                    ),
-                  ),
+                CustomButton(
+                  text: 'Login',
+                  isLoading: provider.isLoading,
+                  fontSize: 15,
+                  onPressed: () async {
+                    await provider.loginUser(
+                      context,
+                      userNameController.text,
+                      passwordController.text,
+                    );
+                  },
                 ),
               ],
             ),
